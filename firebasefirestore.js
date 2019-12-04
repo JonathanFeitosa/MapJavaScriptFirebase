@@ -1,20 +1,30 @@
-const firebase = require("firebase");
-// Required for side-effects
-require("firebase/firestore");
+$(document).ready(function() {
 
-var map;
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -3.0790187, lng: -60.0119109},
-    zoom: 13.4
+  lerDadosMakers();
+
+});
+
+// Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBEJ7WcVVlntN5gGJrLknzRms9-u-ne23g",
+    authDomain: "jsafetransportation.firebaseapp.com",
+    databaseURL: "https://jsafetransportation.firebaseio.com",
+    projectId: "jsafetransportation",
+    storageBucket: "jsafetransportation.appspot.com",
+    messagingSenderId: "846435494070",
+    appId: "1:846435494070:web:5d1491bbb448dd9e3fde17",
+    measurementId: "G-SDRV739FXN"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+
+var db = firebase.firestore();
+function lerDadosMakers(){
+  console.log("Teste");
+  db.collection("users").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+        console.log('${doc.id} => ${doc.data()}');
+    });
   });
-  createMakers();
-}
-function createMakers(){
-    var maker = new google.maps.Marker({
-        position: new google.maps.LatLng(-3.065350, -60.009441),
-        map: map,
-        icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/parking_lot_maps.png"
-    })
-
 }
