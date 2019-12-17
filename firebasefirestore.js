@@ -1,9 +1,11 @@
-$(document).ready(function() {
 
-  console.log("Teste");
+$(document).ready(function() {
   lerDadosMakers();
 
-});
+}
+);
+
+  
 
 // Your web app's Firebase configuration
   var firebaseConfig = {
@@ -22,10 +24,35 @@ $(document).ready(function() {
 
 var db = firebase.firestore();
 function lerDadosMakers(){
-  console.log("Teste");
-  db.collection("users").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        console.log('${doc.id} => ${doc.data()}');
+    db.collection("teste").get().then((querySnapshot) => {
+      querySnapshot.forEach(function(doc) {
+
+        const infoUser = {
+
+          latitude: doc.data().routelines.locations[0].latitude,
+          longitude: doc.data().routelines.locations[0].longitude,
+          imageUrl: doc.data().vehicle.imageUrl
+        }
+
+    //    console.log(doc.id, " => ", doc.data().routelines.locations[0].latitude);
+        createMakers(infoUser)
+
     });
   });
+  
+function createMakers(infoUser){
+
+  var maker = new google.maps.Marker({
+        position: new google.maps.LatLng(infoUser.latitude, infoUser.longitude),
+        map: map,
+        icon: {
+          url: infoUser.imageUrl, // url
+          scaledSize: new google.maps.Size(37, 37), // scaled size
+          origin: new google.maps.Point(0,0), // origin
+          anchor: new google.maps.Point(0, 0) // anchor
+        }
+  })
+}
+
+
 }
