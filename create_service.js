@@ -7,7 +7,11 @@ function startWorker() {
             w = new Worker("demo_workers.js");
         }
         w.onmessage = function(event) {
+
             document.getElementById("result").innerHTML = event.data;
+            console.log("Teste");
+            pegarLinkInfo()
+        
         };
     } else {
         document.getElementById("result").innerHTML = "Você não possui suporte ao Web Worker.";
