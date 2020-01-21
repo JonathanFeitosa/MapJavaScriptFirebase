@@ -27,8 +27,7 @@ function pegarLinkInfo(){
 
     querySnapshot.forEach(function(doc) {
 
-      console.log("Teste");
-      if(linksativos.includes(doc.data().link)){ // SE JÁ TIVER O LINK NO FIREBASE = ATUALIZA
+      if(/*linksativos != null &&*/ linksativos.includes(doc.data().link)){ // SE JÁ TIVER O LINK NO FIREBASE = ATUALIZA
 
         //         linksativos.slice(doc.data().link) // Remove do Loop
 
