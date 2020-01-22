@@ -1,20 +1,36 @@
-<?php
-function getJSONUber($link) {
-    $ch = curl_init();
-    $timeout = 0;
-    $resultado = " ";
-    curl_setopt($ch, CURLOPT_URL,   "https://trip.uber.com/${link}");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3'));
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-    $conteudo = curl_exec ($ch);
-    curl_close($ch);
+<!DOCTYPE html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
 
-    $semParteEsquerda = trim(substr($conteudo, strpos($conteudo, "__REDUX_STATE__")+22)); 
-    $semParteDireita = trim(substr($semParteEsquerda, 0, strrpos($semParteEsquerda, "<script id=\"__ROUTER_DATA__")));
-    $semScript = trim(substr($semParteDireita, 0, strrpos($semParteDireita, "</script>")));
-    $removeDecoder = str_replace("\\u0022", "\"", trim($semScript));
 
-    echo $removeDecoder;
-}
-?>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <title>Safe Transportation</title>
+
+  </head>
+  <body>
+    
+    <div id="map"></div>
+
+    <!--  Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+    <!--  Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js"></script>
+
+    <script type="text/javascript" src="map.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEJ7WcVVlntN5gGJrLknzRms9-u-ne23g&callback=initMap" async defer></script>
+    
+    <script type="text/javascript" src="firebasefirestore.js"></script>
+
+    <script type="text/javascript" src="create_service.js"></script>
+
+    <p>Count numbers: <output id="result"></output></p>
+    <button onclick="startWorker()">Start Worker</button>
+    <button onclick="stopWorker()">Stop Worker</button>
+
+  </body>
+</html>
