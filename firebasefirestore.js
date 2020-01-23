@@ -1,4 +1,4 @@
-var ajax; 
+var ajax;
 
 $(document).ready(function () {
   ajax = iniciaAjax();
@@ -39,6 +39,7 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var linksativos = [];
+var makersativos = [];
 var db = firebase.firestore();
 
 function pegarLinkInfo() {
@@ -67,7 +68,7 @@ function pegarLinkInfo() {
   });
 }
 
-function readLinkHTML(linkUser) {
+function readLinkHTML(linkUser) { // Pegar o Link do HTML
   if (ajax) {
     ajax.open("GET", "convertJSON.php?jLink=" + linkUser.link, true);
     ajax.onreadystatechange = function () {
@@ -75,7 +76,7 @@ function readLinkHTML(linkUser) {
         if (ajax.status == 200) {
           atualizarJSONinHTML(JSON.parse(ajax.responseText));
         } else {
-          console.log(ajax.statusText);
+          console.log("Erro readLinkHTML: " + ajax.statusText);
         }
       }
     }
@@ -86,39 +87,39 @@ function readLinkHTML(linkUser) {
   }
 }
 
-function atualizarJSONinHTML(jsonJFS){
-//  console.log(jsonJFS);
+
+/*
+Criar variavel : Lat, longe, placa.
+placa != variavel.placa
+apaga o antigo e atualiza.
+*/
+function atualizarJSONinHTML(jsonJFS) { // Pegar o que eu preciso do JSON !!!!
+  
   const infoUser = {
     latitude: jsonJFS.routelines.locations[0].latitude,
     longitude: jsonJFS.routelines.locations[0].longitude,
     imageUrl: jsonJFS.vehicle.imageUrl,
-    plateVehicle: jsonJFS.vehicle.licensePlate
+    plateVehicle: jsonJFS.vehicle.licensePlate,
+    maker: ""
   }
+  createMakers(infoUser);
 }
 
-/*
-function lerDadosMakers() {
-  
-  db.collection("teste").get().then((querySnapshot) => {
-    querySnapshot.forEach(function (doc) {
-
-      const infoUser = {
-
-        latitude: doc.data().routelines.locations[0].latitude,
-        longitude: doc.data().routelines.locations[0].longitude,
-        imageUrl: doc.data().vehicle.imageUrl,
-        plateVehicle: doc.data().vehicle.licensePlate
-      }
-
-          console.log(doc.id, " => ", doc.data().routelines.locations[0].latitude);
-        createMakers(infoUser)
-
-    });
-  });
-}*/
 function createMakers(infoUser) {
 
-  var maker = new google.maps.Marker({
+/*
+"Blue Whale".indexOf("Blue") !== -1; // true
+"Blue Whale".indexOf("Bloe") !== -1; // false
+*/
+  if (makersativos.plateVehicle.includes(infoUser.plateVehicle)){
+   // if(makersativos.plateVehicle.indexOf(infoUser.plateVehicle) !== -1)
+    if(makersativos.longitude != infoUser.longitude || makersativos.latitude != infoUser.latitude){
+      makersativos.maker.setMap(null);
+    }
+  }else{
+    makersativos.push(infoUser)
+  }
+  makersativos.maker = new google.maps.Marker({
     position: new google.maps.LatLng(infoUser.latitude, infoUser.longitude),
     map: map,
     icon: {
@@ -128,4 +129,5 @@ function createMakers(infoUser) {
       anchor: new google.maps.Point(0, 0) // anchor
     }
   })
+
 }
